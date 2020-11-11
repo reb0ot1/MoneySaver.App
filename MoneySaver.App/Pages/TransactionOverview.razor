@@ -1,33 +1,22 @@
-﻿@page "/transactions"
+﻿@page "/transactions" 
+
 <h3>Transactions</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Edit</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var transaction in Transactions)
-        {
-            <tr>
-                @*<td><img src="@($"https://gillcleerenpluralsight.blob.core.windows.net/person/{employee.EmployeeId}-small.jpg")" class="rounded-circle" /></td>*@
-                <td>@transaction.CreateOn</td>
-                <td>@transaction.TransactionCategory.Name</td>
-                <td>@transaction.Amount</td>
-                <td>
-                    <a href="@($"employeedetail/test")" class="btn btn-primary table-btn">
-                        <i class="fas fa-info-circle"></i>
-                    </a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<RadzenGrid AllowFiltering="true" FilterMode="Radzen.FilterMode.Advanced" AllowPaging="true" PageSize="20"
+            AllowSorting="true" Data="@Transactions" TItem="MoneySaver.Shared.Models.Transaction" ColumnWidth="200px">
+    <Columns>
+        <RadzenGridColumn CssClass="col-md-2" TItem="MoneySaver.Shared.Models.Transaction" SortProperty="" Property="TransactionDate" Title="Transaction Date" />
+        <RadzenGridColumn TItem="MoneySaver.Shared.Models.Transaction" Property="TransactionCategoryId" Title="Category" />
+        <RadzenGridColumn TItem="MoneySaver.Shared.Models.Transaction" Property="Amount" Title="Amount" />
+        <RadzenGridColumn TItem="MoneySaver.Shared.Models.Transaction" Property="AdditionalNote" Filterable="false" Sortable="false" Title="Notes" />
+        <RadzenGridColumn TItem="MoneySaver.Shared.Models.Transaction" Title="" Filterable="false" Sortable="false">
+            <Template Context="data">
+                <RadzenLink Path="buttons" Text="Edit" />
+            </Template>
+        </RadzenGridColumn>
+    </Columns>
+</RadzenGrid>
 
 <button @onclick="QuickAddTransaction" class="btn btn-dark table-btn quick-add-btn">&nbsp;&nbsp;+&nbsp;&nbsp;</button>
-<AddTransactionDialog @ref="AddTransactionDialog" CloseEventCallback="@AddTransactionDialog_OnDialogClose"></AddTransactionDialog>
+<AddTransactionDialog @ref="AddTransactionDialog" CloseEventCallback="@AddTransactionDialog_OnDialogClose" TransactionCategories="@TransactionCategories.ToArray()"></AddTransactionDialog>
 
 
