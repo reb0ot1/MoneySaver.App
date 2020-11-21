@@ -1,50 +1,76 @@
 ﻿using MoneySaver.App.Components;
-using MoneySaver.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
+using System.Linq;
+using MoneySaver.App.Models;
 
 namespace MoneySaver.App.Pages
 {
     public partial class TransactionOverview
     {
         public IEnumerable<Transaction> Transactions { get; set; }
+
+        public IEnumerable<TransactionCategory> TransactionCategories { get; set; }
         protected async override Task OnInitializedAsync()
         {
-
             Transactions = new List<Transaction>()
             {
                 new Transaction{
-                    Id = Guid.NewGuid(),
+                    Id = "Test1Id",
                     AdditionalNote = "First interaction",
                     Amount = 30.40,
-                    CreateOn = DateTime.Now,
-                    ModifyOn = DateTime.Now,
-                    TransactionCategory = new TransactionCategory{ Id = 1, Name = "Category1"}
+                    TransactionDate = DateTime.Now,
+                    TransactionCategoryId = 1
                 },
                 new Transaction{
-                    Id = Guid.NewGuid(),
+                    Id = "Test2Id",
                     AdditionalNote = "Second interaction",
                     Amount = 34.43,
-                    CreateOn = DateTime.Now,
-                    ModifyOn = DateTime.Now,
-                    TransactionCategory = new TransactionCategory{ Id = 2, Name = "Category2"}
+                    TransactionDate = DateTime.Now,
+                    TransactionCategoryId = 1
                 }
 
+            };
+
+            TransactionCategories = new List<TransactionCategory>()
+            {
+                new TransactionCategory{ TransactionCategoryId = 1, Name = "Category1"},
+                new TransactionCategory{ TransactionCategoryId = 2, Name = "Category2"},
+                new TransactionCategory{ TransactionCategoryId = 3, Name = "Category3"},
             };
         }
 
         protected AddTransactionDialog AddTransactionDialog { get; set; }
 
-        protected void QuickAddTransaction()
+        protected void AddTransaction()
         {
             AddTransactionDialog.Show();
         }
 
-        public async void AddTransactionDialog_OnDialogClose()
+        protected void UpdateTransaction(string transactionId)
+        {
+            AddTransactionDialog.ShowForUpdate(this.Transactions.FirstOrDefault(f => f.Id == transactionId));
+        }
+
+        public async void AddTransactionDialog_OnDialogClose(Transaction transaction)
         {
             //Employees = (await EmployeeDataService.GetAllEmployees()).ToList();
+            var transactions = new List<Transaction>(this.Transactions);
+            var transactionExists = transactions.FirstOrDefault(c => c.Id == transaction.Id);
+            var addOrUpdateTransaction = new Transaction();
+            if (transactionExists != null)
+            {
+                addOrUpdateTransaction = transactionExists;
+            }
+
+            addOrUpdateTransaction.Id = transaction.Id;
+            addOrUpdateTransaction.AdditionalNote = transaction.AdditionalNote;
+            addOrUpdateTransaction.Amount = transaction.Amount;
+            addOrUpdateTransaction.TransactionCategoryId = transaction.TransactionCategoryId;
+            addOrUpdateTransaction.TransactionDate = transaction.TransactionDate;
+            
+            this.Transactions = transactions.OrderByDescending(e => e.TransactionDate);
             StateHasChanged();
         }
     }

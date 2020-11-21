@@ -1,24 +1,46 @@
 ﻿
 using Microsoft.AspNetCore.Components;
-using MoneySaver.Shared.Models;
+using MoneySaver.App.Models;
+using MoneySaver.App.Pages;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MoneySaver.App.Components
 {
     public partial class AddTransactionDialog
     {
-        public Transaction Transaction { get; set; } 
-            = new Transaction { AdditionalNote = "Test note",  CreateOn = DateTime.Now, Amount = 0.0, TransactionCategoryId = 1};
+        public Transaction Transaction { get; set; }
+            = new Transaction
+            {
+                Id = Utilities.GenerateRandomString(8),
+                TransactionDate = DateTime.Now,
+            };
 
         public bool ShowDialog { get; set; }
+        protected string CategoryId = string.Empty;
+        [Parameter]
+        public TransactionCategory[] TransactionCategories { get; set; }
 
         [Parameter]
-        public EventCallback<bool> CloseEventCallback { get; set; }
+        public EventCallback<bool> SaveTransactionCallback { get; set; }
+
+        [Parameter]
+        public EventCallback<Transaction> CloseEventCallback { get; set; }
 
         public void Show()
         {
             ResetDialog();
+            this.ShowDialog = true;
+            StateHasChanged();
+        }
+
+        public void ShowForUpdate(Transaction transaction)
+        {
+            ResetDialog();
+            this.Transaction = transaction;
+            this.CategoryId = transaction.TransactionCategoryId.ToString();
             this.ShowDialog = true;
             StateHasChanged();
         }
@@ -30,15 +52,20 @@ namespace MoneySaver.App.Components
         }
 
         private void ResetDialog()
-        { 
-            
+        {
+            this.CategoryId = default;
+            this.Transaction = new Transaction
+            {
+                Id = Utilities.GenerateRandomString(8),
+                TransactionDate = DateTime.Now,
+            };
         }
 
         protected async Task HandleValidSubmit()
         {
-            //await EmployeeDataService.AddEmployee(Employee);
             ShowDialog = false;
-            await CloseEventCallback.InvokeAsync(true);
+            this.Transaction.TransactionCategoryId = int.Parse(CategoryId);
+            await CloseEventCallback.InvokeAsync(this.Transaction);
             StateHasChanged();
         }
     }   

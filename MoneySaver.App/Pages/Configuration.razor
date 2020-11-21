@@ -1,7 +1,19 @@
 ﻿@page "/configuration"
-
+@using MoneySaver.App.Models;
 <h3>Configuration</h3>
-
-@code {
-
-}
+<div class="row">
+    <div class="col-xl-6" style="margin-bottom: 16px">
+        <div class="row">
+            <div class="col-md-12" style="margin-bottom: 16px">
+                <RadzenTree Expand=@OnExpand Change=@OnChange Data=@categories Style="width: 100%; height: 300px">
+                    <RadzenTreeLevel TextProperty="Name" ChildrenProperty="Children">
+                        <Template>
+                            <strong>@((context.Value as TransactionCategory).Name)</strong>
+                        </Template>
+                    </RadzenTreeLevel>
+                    <RadzenTreeLevel TextProperty="Name" HasChildren=@(product => false) />
+                </RadzenTree>
+            </div>
+            </div>
+        </div>
+    </div>
