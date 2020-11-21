@@ -1,7 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Components;
+using MoneySaver.App.Models;
 using MoneySaver.App.Pages;
-using MoneySaver.Shared.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,6 +36,15 @@ namespace MoneySaver.App.Components
             StateHasChanged();
         }
 
+        public void ShowForUpdate(Transaction transaction)
+        {
+            ResetDialog();
+            this.Transaction = transaction;
+            this.CategoryId = transaction.TransactionCategoryId.ToString();
+            this.ShowDialog = true;
+            StateHasChanged();
+        }
+
         public void Close()
         {
             this.ShowDialog = false;
@@ -43,7 +52,8 @@ namespace MoneySaver.App.Components
         }
 
         private void ResetDialog()
-        { 
+        {
+            this.CategoryId = default;
             this.Transaction = new Transaction
             {
                 Id = Utilities.GenerateRandomString(8),

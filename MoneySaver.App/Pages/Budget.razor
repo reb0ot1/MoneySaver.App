@@ -1,6 +1,79 @@
 ﻿@page "/budget"
 <h3>Budgets</h3>
 
-@code {
+<div class="container">
+    <button @onclick="AddItem" class="btn btn-dark table-btn quick-add-btn">&nbsp;&nbsp;+&nbsp;&nbsp;</button>
+    <BudgetItemDialog @ref="BudgetItemDialog" CloseEventCallback="@AddItem_OnDialogClose"></BudgetItemDialog>
 
-}
+    <div class="row col-md-12" style="font:bold">
+        <div class="col-md-2">
+            Category
+        </div>
+        <div class="col-md-6">
+            Progress
+        </div>
+        <div class="col-md-1">
+            Amount
+        </div>
+        <div class="col-md-1">
+            Spent
+        </div>
+        <div class="col-md-1">
+            Left
+        </div>
+        <div class="col-md-1">
+            Edit
+        </div>
+    </div>
+
+    @foreach (var item in BudgetModel.BudgetItems)
+    {
+        <div class="row col-md-12">
+            <div class="col-md-2">
+                @item.TransactionCategory?.Name
+            </div>
+            <div class="col-md-6">
+                <div class="progress">
+                    <div class="progress-bar @Budget.CheckLevel(item.Progress)"
+                         role="progressbar"
+                         style="width: @(item.Progress)%"
+                         aria-valuenow="@item.Progress"
+                         aria-valuemin="0"
+                         aria-valuemax="100"></div>
+                </div>
+            </div>
+            <div class="col-md-1 text-right">
+                @string.Format("{0:0.00}", item.LimitAmount)
+            </div>
+            <div class="col-md-1 text-right">
+                @string.Format("{0:0.00}", item.SpentAmount)
+            </div>
+            <div class="col-md-1 text-right">
+                @string.Format("{0:0.00}", (item.LimitAmount - item.SpentAmount))
+            </div>
+            <div class="col-md-1">
+                EDIT
+            </div>
+        </div>
+    }
+
+    <div class="row col-md-12" style="font:bold">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-6 text-right">
+            <b>Total:</b>
+        </div>
+        <div class="col-md-1 text-right">
+            0.00
+        </div>
+        <div class="col-md-1 text-right">
+            0.00
+        </div>
+        <div class="col-md-1 text-right">
+            0.00
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+
+</div>

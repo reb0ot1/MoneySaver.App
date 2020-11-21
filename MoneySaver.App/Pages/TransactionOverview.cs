@@ -1,11 +1,9 @@
 ﻿using MoneySaver.App.Components;
-using MoneySaver.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
+using MoneySaver.App.Models;
 
 namespace MoneySaver.App.Pages
 {
@@ -26,7 +24,7 @@ namespace MoneySaver.App.Pages
                     TransactionCategoryId = 1
                 },
                 new Transaction{
-                    Id = "Test1Id",
+                    Id = "Test2Id",
                     AdditionalNote = "Second interaction",
                     Amount = 34.43,
                     TransactionDate = DateTime.Now,
@@ -45,22 +43,34 @@ namespace MoneySaver.App.Pages
 
         protected AddTransactionDialog AddTransactionDialog { get; set; }
 
-        protected void QuickAddTransaction()
+        protected void AddTransaction()
         {
             AddTransactionDialog.Show();
+        }
+
+        protected void UpdateTransaction(string transactionId)
+        {
+            AddTransactionDialog.ShowForUpdate(this.Transactions.FirstOrDefault(f => f.Id == transactionId));
         }
 
         public async void AddTransactionDialog_OnDialogClose(Transaction transaction)
         {
             //Employees = (await EmployeeDataService.GetAllEmployees()).ToList();
-            this.Transactions = new List<Transaction>(this.Transactions) { new Transaction { 
-                Id = transaction.Id,
-                AdditionalNote = transaction.AdditionalNote,
-                Amount = transaction.Amount,
-                TransactionCategoryId = transaction.TransactionCategoryId,
-                TransactionDate = transaction.TransactionDate
-            } }
-                                    .OrderByDescending(e => e.TransactionDate);
+            var transactions = new List<Transaction>(this.Transactions);
+            var transactionExists = transactions.FirstOrDefault(c => c.Id == transaction.Id);
+            var addOrUpdateTransaction = new Transaction();
+            if (transactionExists != null)
+            {
+                addOrUpdateTransaction = transactionExists;
+            }
+
+            addOrUpdateTransaction.Id = transaction.Id;
+            addOrUpdateTransaction.AdditionalNote = transaction.AdditionalNote;
+            addOrUpdateTransaction.Amount = transaction.Amount;
+            addOrUpdateTransaction.TransactionCategoryId = transaction.TransactionCategoryId;
+            addOrUpdateTransaction.TransactionDate = transaction.TransactionDate;
+            
+            this.Transactions = transactions.OrderByDescending(e => e.TransactionDate);
             StateHasChanged();
         }
     }

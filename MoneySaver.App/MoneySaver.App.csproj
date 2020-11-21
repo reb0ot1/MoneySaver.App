@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MoneySaver.Shared\MoneySaver.Shared.Models\MoneySaver.Shared.Models.csproj" />
+    <ProjectReference Include="..\MoneySaver.App.Models\MoneySaver.App.Models.csproj" />
   </ItemGroup>
 
 </Project>
