@@ -1,1 +1,3 @@
 # MoneySaver.App
+
+Blazor app
