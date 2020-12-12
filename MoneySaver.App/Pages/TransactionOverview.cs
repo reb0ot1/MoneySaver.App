@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using MoneySaver.App.Models;
+using System.Net.Http;
+using Microsoft.AspNetCore.Components;
+using System.Net.Http.Json;
+using MoneySaver.App.Services;
+using System.Threading;
 
 namespace MoneySaver.App.Pages
 {
@@ -11,9 +16,15 @@ namespace MoneySaver.App.Pages
     {
         public IEnumerable<Transaction> Transactions { get; set; }
 
+        [Inject]
+        public ICategoryService CategoryService { get; set; }
+
         public IEnumerable<TransactionCategory> TransactionCategories { get; set; }
+
         protected async override Task OnInitializedAsync()
         {
+            TransactionCategories = (await CategoryService.GetAll()).ToList();
+
             Transactions = new List<Transaction>()
             {
                 new Transaction{
@@ -30,15 +41,15 @@ namespace MoneySaver.App.Pages
                     TransactionDate = DateTime.Now,
                     TransactionCategoryId = 1
                 }
-
             };
 
-            TransactionCategories = new List<TransactionCategory>()
-            {
-                new TransactionCategory{ TransactionCategoryId = 1, Name = "Category1"},
-                new TransactionCategory{ TransactionCategoryId = 2, Name = "Category2"},
-                new TransactionCategory{ TransactionCategoryId = 3, Name = "Category3"},
-            };
+            //var ttt = (await CategoryService.GetAll()).ToList();
+            //TransactionCategories = new List<TransactionCategory>()
+            //{
+            //    new TransactionCategory{ TransactionCategoryId = 1, Name = "Category1"},
+            //    new TransactionCategory{ TransactionCategoryId = 2, Name = "Category2"},
+            //    new TransactionCategory{ TransactionCategoryId = 3, Name = "Category3"},
+            //};
         }
 
         protected AddTransactionDialog AddTransactionDialog { get; set; }

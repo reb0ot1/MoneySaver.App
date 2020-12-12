@@ -1,9 +1,13 @@
 ﻿@page "/"
-
+@attribute [Authorize]
 <h1>Hello to money saving world!</h1>
+    @*<AuthorizeView>
+            <Authorized>
+                <h1>Hello to money saving world!</h1>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
-
-<button class="alert" type="button">AddTransaction</button>
+                Welcome to your new app.
+            </Authorized>
+            <NotAuthorized>
+                <p>I'm sorry, I can't display anything until you log in</p>
+            </NotAuthorized>
+        </AuthorizeView>*@

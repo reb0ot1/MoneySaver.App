@@ -1,22 +1,36 @@
-﻿@page "/transactions" 
-
+﻿@page "/transactions"
+@attribute [Authorize]
+@using System.Linq
 <h3>Transactions</h3>
-<RadzenGrid AllowFiltering="true" FilterMode="Radzen.FilterMode.Advanced" AllowPaging="true" PageSize="20"
-            AllowSorting="true" Data="@Transactions" TItem="MoneySaver.App.Models.Transaction" ColumnWidth="200px">
-    <Columns>
-        <RadzenGridColumn CssClass="col-md-2" TItem="MoneySaver.App.Models.Transaction" SortProperty="" Property="TransactionDate" Title="Transaction Date" />
-        <RadzenGridColumn TItem="MoneySaver.App.Models.Transaction" Property="TransactionCategoryId" Title="Category" />
-        <RadzenGridColumn TItem="MoneySaver.App.Models.Transaction" Property="Amount" Title="Amount" />
-        <RadzenGridColumn TItem="MoneySaver.App.Models.Transaction" Property="AdditionalNote" Filterable="false" Sortable="false" Title="Notes" />
-        <RadzenGridColumn TItem="MoneySaver.App.Models.Transaction" Title="" Filterable="false" Sortable="false">
-            <Template Context="transaction">
-                <RadzenButton Click="@((args) => UpdateTransaction(transaction.Id))" Text="Edit" />
-            </Template>
-        </RadzenGridColumn>
-    </Columns>
-</RadzenGrid>
+@if (Transactions == null)
+{
+    <div>Loading...</div>
+}
+else
+{
+    if (!Transactions.Any())
+    {
+        <div>No data</div>
+    }
+    else
+    {
+        <RadzenGrid AllowFiltering="true" FilterMode="Radzen.FilterMode.Advanced" AllowPaging="true" PageSize="20"
+                    AllowSorting="true" Data="@Transactions" TItem="MoneySaver.App.Models.Transaction" ColumnWidth="200px">
+            <Columns>
+                <RadzenGridColumn CssClass="col-md-2" TItem="MoneySaver.App.Models.Transaction" SortProperty="" Property="TransactionDate" Title="Transaction Date" />
+                <RadzenGridColumn TItem="MoneySaver.App.Models.Transaction" Property="TransactionCategoryId" Title="Category" />
+                <RadzenGridColumn TItem="MoneySaver.App.Models.Transaction" Property="Amount" Title="Amount" />
+                <RadzenGridColumn TItem="MoneySaver.App.Models.Transaction" Property="AdditionalNote" Filterable="false" Sortable="false" Title="Notes" />
+                <RadzenGridColumn TItem="MoneySaver.App.Models.Transaction" Title="" Filterable="false" Sortable="false">
+                    <Template Context="transaction">
+                        <RadzenButton Click="@((args) => UpdateTransaction(transaction.Id))" Text="Edit" />
+                    </Template>
+                </RadzenGridColumn>
+            </Columns>
+        </RadzenGrid>
 
-<button @onclick="AddTransaction" class="btn btn-dark table-btn quick-add-btn">&nbsp;&nbsp;+&nbsp;&nbsp;</button>
-<AddTransactionDialog @ref="AddTransactionDialog" CloseEventCallback="@AddTransactionDialog_OnDialogClose" TransactionCategories="@TransactionCategories.ToArray()"></AddTransactionDialog>
-
+        <button @onclick="AddTransaction" class="btn btn-dark table-btn quick-add-btn">&nbsp;&nbsp;+&nbsp;&nbsp;</button>
+        <AddTransactionDialog @ref="AddTransactionDialog" CloseEventCallback="@AddTransactionDialog_OnDialogClose" TransactionCategories="@TransactionCategories.ToArray()"></AddTransactionDialog>
+    }
+}
 
