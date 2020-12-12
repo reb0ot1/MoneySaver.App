@@ -7,6 +7,7 @@ namespace MoneySaver.App.Models
     public class TransactionCategory
     {
         public int TransactionCategoryId { get; set; }
+
         public string Name { get; set; }
 
         public IEnumerable<TransactionCategory> Children { get; set; } = new List<TransactionCategory>();
