@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Components;
 using MoneySaver.App.Models;
 using MoneySaver.App.Pages;
+using MoneySaver.App.Services;
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MoneySaver.App.Components
@@ -14,12 +14,19 @@ namespace MoneySaver.App.Components
         public Transaction Transaction { get; set; }
             = new Transaction
             {
-                Id = Utilities.GenerateRandomString(8),
+                Id = Guid.NewGuid(),
                 TransactionDate = DateTime.Now,
             };
 
         public bool ShowDialog { get; set; }
+
+        public bool ForUpdate { get; set; } = false;
+
         protected string CategoryId = string.Empty;
+
+        [Inject]
+        public ITransactionService TransactionService { get; set; }
+
         [Parameter]
         public TransactionCategory[] TransactionCategories { get; set; }
 
@@ -27,11 +34,12 @@ namespace MoneySaver.App.Components
         public EventCallback<bool> SaveTransactionCallback { get; set; }
 
         [Parameter]
-        public EventCallback<Transaction> CloseEventCallback { get; set; }
+        public EventCallback<bool> CloseEventCallback { get; set; }
 
         public void Show()
         {
             ResetDialog();
+            this.CategoryId = this.TransactionCategories.First().TransactionCategoryId.ToString();
             this.ShowDialog = true;
             StateHasChanged();
         }
@@ -39,6 +47,7 @@ namespace MoneySaver.App.Components
         public void ShowForUpdate(Transaction transaction)
         {
             ResetDialog();
+            ForUpdate = true;
             this.Transaction = transaction;
             this.CategoryId = transaction.TransactionCategoryId.ToString();
             this.ShowDialog = true;
@@ -56,8 +65,9 @@ namespace MoneySaver.App.Components
             this.CategoryId = default;
             this.Transaction = new Transaction
             {
-                Id = Utilities.GenerateRandomString(8),
+                Id = Guid.NewGuid(),
                 TransactionDate = DateTime.Now,
+                TransactionCategoryId = TransactionCategories.First().TransactionCategoryId
             };
         }
 
@@ -65,7 +75,16 @@ namespace MoneySaver.App.Components
         {
             ShowDialog = false;
             this.Transaction.TransactionCategoryId = int.Parse(CategoryId);
-            await CloseEventCallback.InvokeAsync(this.Transaction);
+            if (ForUpdate)
+            {
+                await this.TransactionService.UpdateAsync(this.Transaction);
+            }
+            else
+            {
+                await this.TransactionService.AddAsync(this.Transaction);
+            }
+            
+            await CloseEventCallback.InvokeAsync(true);
             StateHasChanged();
         }
     }   

@@ -18,7 +18,11 @@ else
                     AllowSorting="true" Data="@Transactions" TItem="MoneySaver.App.Models.Transaction" ColumnWidth="200px">
             <Columns>
                 <RadzenGridColumn CssClass="col-md-2" TItem="MoneySaver.App.Models.Transaction" SortProperty="" Property="TransactionDate" Title="Transaction Date" />
-                <RadzenGridColumn TItem="MoneySaver.App.Models.Transaction" Property="TransactionCategoryId" Title="Category" />
+                <RadzenGridColumn TItem="MoneySaver.App.Models.Transaction" Property="TransactionCategoryId" Title="Category">
+                    <Template Context="data">
+                        @TransactionCategories.First(e => e.TransactionCategoryId == data.TransactionCategoryId).Name
+                    </Template>
+                </RadzenGridColumn>
                 <RadzenGridColumn TItem="MoneySaver.App.Models.Transaction" Property="Amount" Title="Amount" />
                 <RadzenGridColumn TItem="MoneySaver.App.Models.Transaction" Property="AdditionalNote" Filterable="false" Sortable="false" Title="Notes" />
                 <RadzenGridColumn TItem="MoneySaver.App.Models.Transaction" Title="" Filterable="false" Sortable="false">

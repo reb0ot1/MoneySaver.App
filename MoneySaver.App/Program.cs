@@ -25,15 +25,28 @@ namespace MoneySaver.App
                         scopes: new[] { "manage" }
                         );
 
+<<<<<<< Updated upstream
                     return handler;
                 });
             builder.Services.AddScoped(sp => sp.GetService<IHttpClientFactory>().CreateClient("api"));
+=======
+<<<<<<< Updated upstream
+=======
+                    return handler;
+                });
+            builder.Services.AddScoped(sp => sp.GetService<IHttpClientFactory>().CreateClient("api"));
+            builder.Services.AddScoped<ITransactionService, TransactionService>();
+>>>>>>> Stashed changes
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddOidcAuthentication(options =>
             {
                 builder.Configuration.Bind("oidc", options.ProviderOptions);
             });
             
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
             await builder.Build().RunAsync();
         }
     }
