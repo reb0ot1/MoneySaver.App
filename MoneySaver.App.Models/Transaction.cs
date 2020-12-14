@@ -6,7 +6,7 @@ namespace MoneySaver.App.Models
 {
     public class Transaction
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         public DateTime TransactionDate { get; set; }
 
