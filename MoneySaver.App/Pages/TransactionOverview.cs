@@ -26,8 +26,6 @@ namespace MoneySaver.App.Pages
 
         protected async override Task OnInitializedAsync()
         {
-            TransactionCategories = (await CategoryService.GetAll()).ToList();
-
             TransactionCategories = (await CategoryService.GetAll())
                 .ToList();
             Transactions = (await this.TransactionService.GetAllAsync())
