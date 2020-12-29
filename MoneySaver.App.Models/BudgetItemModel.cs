@@ -8,8 +8,6 @@ namespace MoneySaver.App.Models
         {
         }
 
-        public int BudgetItemId { get; set; }
-
         public int BudgetId { get; set; }
 
         public int TransactionCategoryId { get; set; }
