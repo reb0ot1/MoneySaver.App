@@ -33,16 +33,16 @@ namespace MoneySaver.App.Pages
                 .ToList();
         }
 
-        protected AddTransactionDialog AddTransactionDialog { get; set; }
+        protected TransactionDialog TransactionDialog { get; set; }
 
         protected void AddTransaction()
         {
-            AddTransactionDialog.Show();
+            TransactionDialog.Show();
         }
 
         protected void UpdateTransaction(Guid transactionId)
         {
-            AddTransactionDialog.ShowForUpdate(this.Transactions.FirstOrDefault(f => f.Id == transactionId));
+            TransactionDialog.Show(this.Transactions.FirstOrDefault(f => f.Id == transactionId));
         }
 
         public async void AddTransactionDialog_OnDialogClose(bool result)

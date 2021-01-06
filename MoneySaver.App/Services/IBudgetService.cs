@@ -9,5 +9,9 @@ namespace MoneySaver.App.Services
     public interface IBudgetService
     {
         Task<BudgetModel> GetBudgetByTimeType(int intType);
+
+        Task AddBudgetItem(BudgetItemModel budgetItem);
+
+        Task UpdateBudgetItem(BudgetItemModel budgetItem);
     }
 }

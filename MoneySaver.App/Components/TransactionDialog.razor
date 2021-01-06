@@ -24,9 +24,9 @@
                             <label for="transactionCategory" class="col-sm-3">Category: </label>
                             <InputSelect id="transactionCategory" class="form-control col-sm-8" @bind-Value="@CategoryId">
                                 @foreach (var category in TransactionCategories)
-                                {
+                                    {
                                     <option value="@category.TransactionCategoryId">@category.Name</option>
-                                }
+                                    }
                             </InputSelect>
                         </div>
                         <div class="form-group">
@@ -36,7 +36,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">AdditionalNote: </label>
-                            <InputTextArea  id="additionalNote" class="form-control" @bind-Value="@Transaction.AdditionalNote" placeholder="Additional info"></InputTextArea>
+                            <InputTextArea id="additionalNote" class="form-control" @bind-Value="@Transaction.AdditionalNote" placeholder="Additional info"></InputTextArea>
                             <ValidationMessage For="@(() => Transaction.AdditionalNote)" />
                         </div>
 

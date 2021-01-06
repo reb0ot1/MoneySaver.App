@@ -9,7 +9,7 @@ else
 {
     <div class="container">
         <button @onclick="AddItem" class="btn btn-dark table-btn quick-add-btn">&nbsp;&nbsp;+&nbsp;&nbsp;</button>
-        <BudgetItemDialog @ref="BudgetItemDialog" CloseEventCallback="@AddItem_OnDialogClose"></BudgetItemDialog>
+        <BudgetItemDialog @ref="BudgetItemDialog" CloseEventCallback="@AddItem_OnDialogClose" ТransactionCategories="@TransactionCategories.ToArray()"></BudgetItemDialog>
 
         <div class="row col-md-12" style="font:bold">
             <div class="col-md-2">
@@ -28,7 +28,6 @@ else
                 Left
             </div>
             <div class="col-md-1">
-                Edit
             </div>
         </div>
 
@@ -58,6 +57,7 @@ else
                     @string.Format("{0:0.00}", (item.LimitAmount - item.SpentAmount))
                 </div>
                 <div class="col-md-1">
+                    <button type="button" class="btn btn-primary" @onclick="@(() => EditItem(item))">Edit</button>
                 </div>
             </div>
         }

@@ -50,30 +50,27 @@ namespace MoneySaver.App.Pages
             this.BudgetItemDialog.Show();
         }
 
-        public async void AddItem_OnDialogClose(BudgetItemModel budgetItem)
+        protected void EditItem(BudgetItemModel item)
         {
-            //var newInstance = new BudgetModel()
-            //{
-            //    BudgetItems = new List<BudgetItemModel>(this.BudgetModel.BudgetItems)
-            //};
-            ////var items = new List<BudgetItemModel>(this.BudgetModel.BudgetItems);
-            //newInstance.BudgetItems.Add(budgetItem);
+            this.BudgetItemDialog.Show(item);
+        }
 
-            //this.BudgetModel = newInstance;
-            //var transactionExists = transactions.FirstOrDefault(c => c.Id == transaction.Id);
-            //var addOrUpdateTransaction = new Transaction();
-            //if (transactionExists != null)
-            //{
-            //    addOrUpdateTransaction = transactionExists;
-            //}
+        public async void AddItem_OnDialogClose()
+        {
+            TransactionCategories = (await CategoryService.GetAll())
+                .ToList();
 
-            //addOrUpdateTransaction.Id = transaction.Id;
-            //addOrUpdateTransaction.AdditionalNote = transaction.AdditionalNote;
-            //addOrUpdateTransaction.Amount = transaction.Amount;
-            //addOrUpdateTransaction.TransactionCategoryId = transaction.TransactionCategoryId;
-            //addOrUpdateTransaction.TransactionDate = transaction.TransactionDate;
+            var budgetItems = await BudgetService.GetBudgetByTimeType(2);
+            foreach (var item in budgetItems.BudgetItems)
+            {
+                if (item != null)
+                {
+                    item.TransactionCategory = this.TransactionCategories
+                        .FirstOrDefault(e => e.TransactionCategoryId == item.TransactionCategoryId);
+                }
+            }
 
-            //this.Transactions = transactions.OrderByDescending(e => e.TransactionDate);
+            BudgetModel = budgetItems;
             StateHasChanged();
         }
 
