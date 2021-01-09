@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using MoneySaver.App.Models;
 using MoneySaver.App.Pages;
 using MoneySaver.App.Services;
@@ -9,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace MoneySaver.App.Components
 {
-    public partial class AddTransactionDialog
+    public partial class TransactionDialog
     {
+        private bool forUpdate = false;
         public Transaction Transaction { get; set; }
             = new Transaction
             {
@@ -19,8 +19,6 @@ namespace MoneySaver.App.Components
             };
 
         public bool ShowDialog { get; set; }
-
-        public bool ForUpdate { get; set; } = false;
 
         protected string CategoryId = string.Empty;
 
@@ -36,20 +34,21 @@ namespace MoneySaver.App.Components
         [Parameter]
         public EventCallback<bool> CloseEventCallback { get; set; }
 
-        public void Show()
+        public void Show(Transaction transaction = null)
         {
             ResetDialog();
-            this.CategoryId = this.TransactionCategories.First().TransactionCategoryId.ToString();
-            this.ShowDialog = true;
-            StateHasChanged();
-        }
-
-        public void ShowForUpdate(Transaction transaction)
-        {
-            ResetDialog();
-            ForUpdate = true;
-            this.Transaction = transaction;
-            this.CategoryId = transaction.TransactionCategoryId.ToString();
+            if (transaction != null)
+            {
+                this.Transaction = transaction;
+                this.CategoryId = transaction.TransactionCategoryId.ToString();
+            }
+            else
+            {
+                this.CategoryId = this.TransactionCategories
+                .First().TransactionCategoryId
+                .ToString();
+            }
+            
             this.ShowDialog = true;
             StateHasChanged();
         }
@@ -69,13 +68,14 @@ namespace MoneySaver.App.Components
                 TransactionDate = DateTime.Now,
                 TransactionCategoryId = TransactionCategories.First().TransactionCategoryId
             };
+            this.forUpdate = false;
         }
 
         protected async Task HandleValidSubmit()
         {
             ShowDialog = false;
             this.Transaction.TransactionCategoryId = int.Parse(CategoryId);
-            if (ForUpdate)
+            if (this.forUpdate)
             {
                 await this.TransactionService.UpdateAsync(this.Transaction);
             }

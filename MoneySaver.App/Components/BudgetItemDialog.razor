@@ -20,7 +20,7 @@
                             <InputDate id="transactionDate" class="form-control" @bind-Value="@Transaction.TransactionDate"></InputDate>
                             <ValidationMessage For="@(() => Transaction.TransactionDate)" />
                         </div>*@
-                        @*<div class="form-group row">
+                        <div class="form-group row">
                             <label for="transactionCategory" class="col-sm-3">Category: </label>
                             <InputSelect id="transactionCategory" class="form-control col-sm-8" @bind-Value="@CategoryId">
                                 @foreach (var category in ТransactionCategories)
@@ -28,7 +28,7 @@
                                     <option value="@category.TransactionCategoryId">@category.Name</option>
                                     }
                             </InputSelect>
-                        </div>*@
+                        </div>
                         <div class="form-group">
                             <label for="">Amount: </label>
                             <InputNumber id="amount" class="form-control" @bind-Value="@BudgetItemModel.LimitAmount"></InputNumber>
