@@ -38,7 +38,7 @@ namespace MoneySaver.App.Services
             var response = await this.httpClient.PostAsync(new Uri(this.uri, "api/budget/additem"), budgetItemJson);
             if (response.IsSuccessStatusCode)
             {
-                var result = await JsonSerializer.DeserializeAsync<BudgetItemModel>(await response.Content.ReadAsStreamAsync());
+                await JsonSerializer.DeserializeAsync<BudgetItemModel>(await response.Content.ReadAsStreamAsync());
             }
         }
 
@@ -54,6 +54,12 @@ namespace MoneySaver.App.Services
             {
                 var result = await JsonSerializer.DeserializeAsync<BudgetItemModel>(await response.Content.ReadAsStreamAsync());
             }
+        }
+
+        public async Task RemoveBudgetItem(int id)
+        {
+            var uri = new Uri(this.uri, $"api/budget/removeitem/{id}");
+            await this.httpClient.DeleteAsync(uri);
         }
     }
 }

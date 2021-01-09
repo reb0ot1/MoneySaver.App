@@ -57,6 +57,29 @@ namespace MoneySaver.App.Pages
 
         public async void AddItem_OnDialogClose()
         {
+            //TODO: Needs refactoring
+            TransactionCategories = (await CategoryService.GetAll())
+                .ToList();
+
+            var budgetItems = await BudgetService.GetBudgetByTimeType(2);
+            foreach (var item in budgetItems.BudgetItems)
+            {
+                if (item != null)
+                {
+                    item.TransactionCategory = this.TransactionCategories
+                        .FirstOrDefault(e => e.TransactionCategoryId == item.TransactionCategoryId);
+                }
+            }
+
+            BudgetModel = budgetItems;
+            StateHasChanged();
+        }
+
+        public async void RemoveItem(int id)
+        {
+            //TODO: Needs refactoring
+            //TODO: Neet to show pop-up to confirm that the user is okay to remove the selected item
+            await this.BudgetService.RemoveBudgetItem(id);
             TransactionCategories = (await CategoryService.GetAll())
                 .ToList();
 

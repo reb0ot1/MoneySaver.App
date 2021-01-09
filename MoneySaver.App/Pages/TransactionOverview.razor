@@ -33,7 +33,7 @@ else
             </Columns>
         </RadzenGrid>
 
-        <button @onclick="AddTransaction" class="btn btn-dark table-btn quick-add-btn">&nbsp;&nbsp;+&nbsp;&nbsp;</button>
+        <button @onclick="AddTransaction" class="btn btn-info table-btn quick-add-btn"><i class="fas fa-plus" /></button>
         <TransactionDialog @ref="TransactionDialog" CloseEventCallback="@AddTransactionDialog_OnDialogClose" TransactionCategories="@TransactionCategories.ToArray()"></TransactionDialog>
     }
 }

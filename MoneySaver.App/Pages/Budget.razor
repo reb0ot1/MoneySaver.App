@@ -8,14 +8,14 @@
 else
 {
     <div class="container">
-        <button @onclick="AddItem" class="btn btn-dark table-btn quick-add-btn">&nbsp;&nbsp;+&nbsp;&nbsp;</button>
+        <button @onclick="AddItem" class="btn btn-info table-btn quick-add-btn"><i class="fas fa-plus" /></button>
         <BudgetItemDialog @ref="BudgetItemDialog" CloseEventCallback="@AddItem_OnDialogClose" ТransactionCategories="@TransactionCategories.ToArray()"></BudgetItemDialog>
 
         <div class="row col-md-12" style="font:bold">
             <div class="col-md-2">
                 Category
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5">
                 Progress
             </div>
             <div class="col-md-1">
@@ -27,7 +27,7 @@ else
             <div class="col-md-1">
                 Left
             </div>
-            <div class="col-md-1">
+            <div class="col-md-2">
             </div>
         </div>
 
@@ -37,7 +37,7 @@ else
                 <div class="col-md-2">
                     @item.TransactionCategory?.Name
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <div class="progress">
                         <div class="progress-bar @Budget.CheckLevel(item.Progress)"
                              role="progressbar"
@@ -56,8 +56,15 @@ else
                 <div class="col-md-1 text-right">
                     @string.Format("{0:0.00}", (item.LimitAmount - item.SpentAmount))
                 </div>
-                <div class="col-md-1">
-                    <button type="button" class="btn btn-primary" @onclick="@(() => EditItem(item))">Edit</button>
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-primary" @onclick="@(() => EditItem(item))"><i class="fas fa-edit"></i></button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-danger" @onclick="@(() => RemoveItem(item.Id))"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
                 </div>
             </div>
         }
@@ -65,7 +72,7 @@ else
         <div class="row col-md-12" style="font:bold">
             <div class="col-md-2">
             </div>
-            <div class="col-md-6 text-right">
+            <div class="col-md-5 text-right">
                 <b>Total:</b>
             </div>
             <div class="col-md-1 text-right">
@@ -77,7 +84,7 @@ else
             <div class="col-md-1 text-right">
                 @string.Format("{0:0.00}", BudgetModel.TotalLeftAmount)
             </div>
-            <div class="col-md-1">
+            <div class="col-md-2">
             </div>
         </div>
 

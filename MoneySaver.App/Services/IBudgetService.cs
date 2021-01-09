@@ -13,5 +13,7 @@ namespace MoneySaver.App.Services
         Task AddBudgetItem(BudgetItemModel budgetItem);
 
         Task UpdateBudgetItem(BudgetItemModel budgetItem);
+
+        Task RemoveBudgetItem(int id);
     }
 }
