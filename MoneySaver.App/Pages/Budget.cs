@@ -27,8 +27,8 @@ namespace MoneySaver.App.Pages
 
         protected async override Task OnInitializedAsync()
         {
-            TransactionCategories = (await CategoryService.GetAll())
-                .ToList();
+            var categories = await CategoryService.GetAllAsync();
+            TransactionCategories = this.PrepareForVisualization(categories);
 
             var budgetItems = await BudgetService.GetBudgetByTimeType(2);
             foreach (var item in budgetItems.BudgetItems)
@@ -58,8 +58,8 @@ namespace MoneySaver.App.Pages
         public async void AddItem_OnDialogClose()
         {
             //TODO: Needs refactoring
-            TransactionCategories = (await CategoryService.GetAll())
-                .ToList();
+            var categories = await CategoryService.GetAllAsync();
+            TransactionCategories = this.PrepareForVisualization(categories);
 
             var budgetItems = await BudgetService.GetBudgetByTimeType(2);
             foreach (var item in budgetItems.BudgetItems)
@@ -80,8 +80,8 @@ namespace MoneySaver.App.Pages
             //TODO: Needs refactoring
             //TODO: Neet to show pop-up to confirm that the user is okay to remove the selected item
             await this.BudgetService.RemoveBudgetItem(id);
-            TransactionCategories = (await CategoryService.GetAll())
-                .ToList();
+            var categories = await CategoryService.GetAllAsync();
+            TransactionCategories = this.PrepareForVisualization(categories);
 
             var budgetItems = await BudgetService.GetBudgetByTimeType(2);
             foreach (var item in budgetItems.BudgetItems)
@@ -95,6 +95,32 @@ namespace MoneySaver.App.Pages
 
             BudgetModel = budgetItems;
             StateHasChanged();
+        }
+
+        //TODO: The method bellow needs to be declare once, because it`s used by other pages.
+        private IEnumerable<TransactionCategory> PrepareForVisualization(IEnumerable<TransactionCategory> categories)
+        {
+            var result = new List<TransactionCategory>();
+            var parentTransactionCategoryModels = categories
+                .Where(w => w.ParentId == null);
+
+            foreach (var parentCategory in parentTransactionCategoryModels)
+            {
+                var children = categories
+                    .Where(w => w.ParentId == parentCategory.TransactionCategoryId)
+                    .ToList();
+                if (children.Any())
+                {
+                    foreach (var item in children)
+                    {
+                        item.AlternativeName = $"{parentCategory.Name}, {item.Name}";
+                    }
+                }
+
+                parentCategory.AlternativeName = parentCategory.Name;
+            }
+
+            return categories.OrderBy(e => e.AlternativeName);
         }
 
         public static string CheckLevel(int percValue)

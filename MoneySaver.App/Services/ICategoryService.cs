@@ -8,6 +8,10 @@ namespace MoneySaver.App.Services
 {
     public interface ICategoryService
     {
-        Task<IEnumerable<TransactionCategory>> GetAll();
+        Task<IEnumerable<TransactionCategory>> GetAllAsync();
+
+        Task AddCategory(TransactionCategory category);
+        
+        Task UpdateCategory(TransactionCategory category);
     }
 }

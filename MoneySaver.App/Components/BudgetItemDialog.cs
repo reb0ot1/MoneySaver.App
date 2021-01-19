@@ -66,14 +66,14 @@ namespace MoneySaver.App.Components
 
         private void ResetDialog()
         {
-            this.CategoryId = default;
             var defaultCategory = this.ТransactionCategories.First();
             this.forUpdate = false;
             this.BudgetItemModel = new BudgetItemModel
             {
-                TransactionCategoryId = defaultCategory.TransactionCategoryId,
+                TransactionCategoryId = (int)defaultCategory.TransactionCategoryId,
                 LimitAmount = 0
             };
+            this.CategoryId = defaultCategory.TransactionCategoryId.ToString();
         }
     }
 }
