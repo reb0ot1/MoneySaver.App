@@ -26,8 +26,9 @@ namespace MoneySaver.App.Pages
 
         protected async override Task OnInitializedAsync()
         {
-            TransactionCategories = (await CategoryService.GetAll())
-                .ToList();
+            var result = await CategoryService.GetAllAsync();
+            TransactionCategories = this.PrepareForVisualization(result);
+            //TransactionCategories = await CategoryService.GetAllAsync();
             Transactions = (await this.TransactionService.GetAllAsync())
                 .OrderByDescending(t => t.TransactionDate)
                 .ToList();
@@ -47,8 +48,34 @@ namespace MoneySaver.App.Pages
 
         public async void AddTransactionDialog_OnDialogClose(bool result)
         {
-            this.Transactions = (await this.TransactionService.GetAllAsync()).OrderByDescending(t => t.TransactionDate).ToList();
+            this.Transactions = (await this.TransactionService.GetAllAsync()).OrderByDescending(t => t.TransactionDate)
+                .ToList();
             StateHasChanged();
+        }
+
+        private IEnumerable<TransactionCategory> PrepareForVisualization(IEnumerable<TransactionCategory> categories)
+        {
+            var result = new List<TransactionCategory>();
+            var parentTransactionCategoryModels = categories
+                .Where(w => w.ParentId == null);
+
+            foreach (var parentCategory in parentTransactionCategoryModels)
+            {
+                var children = categories
+                    .Where(w => w.ParentId == parentCategory.TransactionCategoryId)
+                    .ToList();
+                if (children.Any())
+                {
+                    foreach (var item in children)
+                    {
+                        item.AlternativeName = $"{parentCategory.Name}, {item.Name}";
+                    }
+                }
+
+                parentCategory.AlternativeName = parentCategory.Name;
+            }
+
+            return categories.OrderBy(e => e.AlternativeName).ToList();
         }
     }
 }

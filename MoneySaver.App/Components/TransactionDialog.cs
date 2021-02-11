@@ -41,12 +41,14 @@ namespace MoneySaver.App.Components
             {
                 this.Transaction = transaction;
                 this.CategoryId = transaction.TransactionCategoryId.ToString();
+                this.forUpdate = true;
             }
             else
             {
                 this.CategoryId = this.TransactionCategories
                 .First().TransactionCategoryId
                 .ToString();
+                this.forUpdate = false;
             }
             
             this.ShowDialog = true;
@@ -66,7 +68,7 @@ namespace MoneySaver.App.Components
             {
                 Id = Guid.NewGuid(),
                 TransactionDate = DateTime.Now,
-                TransactionCategoryId = TransactionCategories.First().TransactionCategoryId
+                TransactionCategoryId = (int)TransactionCategories.First().TransactionCategoryId
             };
             this.forUpdate = false;
         }

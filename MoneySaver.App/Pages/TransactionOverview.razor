@@ -20,7 +20,7 @@ else
                 <RadzenGridColumn CssClass="col-md-2" TItem="MoneySaver.App.Models.Transaction" SortProperty="" Property="TransactionDate" Title="Transaction Date" />
                 <RadzenGridColumn TItem="MoneySaver.App.Models.Transaction" Property="TransactionCategoryId" Title="Category">
                     <Template Context="data">
-                        @TransactionCategories.First(e => e.TransactionCategoryId == data.TransactionCategoryId).Name
+                        @TransactionCategories.First(e => e.TransactionCategoryId == data.TransactionCategoryId).AlternativeName
                     </Template>
                 </RadzenGridColumn>
                 <RadzenGridColumn TItem="MoneySaver.App.Models.Transaction" Property="Amount" Title="Amount" />
