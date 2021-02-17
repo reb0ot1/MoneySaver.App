@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using MoneySaver.App.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using MoneySaver.App.Models.Configurations;
 
 namespace MoneySaver.App
 {
@@ -16,14 +17,18 @@ namespace MoneySaver.App
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
+            //builder.Services.AddSingleton(builder.Configuration.GetSection(nameof(DataApi)).Get<DataApi>());
+            var dataApiConf = new DataApi();
+            builder.Configuration.Bind(nameof(DataApi), dataApiConf);
+            builder.Services.AddSingleton(dataApiConf);
             builder.Services.AddHttpClient("api")
                 .AddHttpMessageHandler(sp =>
                 {
                     var handler = sp.GetService<AuthorizationMessageHandler>()
                     .ConfigureHandler(
                         //TODO: Move the url to centralized place
-                        authorizedUrls: new[] { "https://localhost:6001" },
-                        scopes: new[] { "manage" }
+                        authorizedUrls: new[] { dataApiConf.Url },
+                        scopes: dataApiConf.Scopes
                         );
 
                     return handler;
