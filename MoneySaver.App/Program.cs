@@ -26,7 +26,6 @@ namespace MoneySaver.App
                 {
                     var handler = sp.GetService<AuthorizationMessageHandler>()
                     .ConfigureHandler(
-                        //TODO: Move the url to centralized place
                         authorizedUrls: new[] { dataApiConf.Url },
                         scopes: dataApiConf.Scopes
                         );
