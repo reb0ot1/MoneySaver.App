@@ -1,4 +1,5 @@
 ﻿using MoneySaver.App.Models;
+using MoneySaver.App.Models.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,9 @@ namespace MoneySaver.App.Services
         private HttpClient httpClient;
         private Uri uri;
 
-        public CategoryService(HttpClient httpClient)
+        public CategoryService(HttpClient httpClient, DataApi dataApi)
         {
-            this.uri = new Uri("https://localhost:6001");
+            this.uri = new Uri(dataApi.Url);
             this.httpClient = httpClient;
         }
 

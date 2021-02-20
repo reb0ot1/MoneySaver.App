@@ -1,4 +1,5 @@
 ﻿using MoneySaver.App.Models;
+using MoneySaver.App.Models.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +13,14 @@ namespace MoneySaver.App.Services
 {
     public class TransactionService : ITransactionService
     {
-        private const string baseUrl = "https://localhost:6001/api/transaction";
+        private string baseUrl = "https://localhost:6001/api/transaction";
         //TODO: Change HttpClient with httpClientFactory
         private HttpClient httpClient { get; set; }
 
-        public TransactionService(HttpClient httpClient)
+        public TransactionService(HttpClient httpClient, DataApi dataApi)
         {
             this.httpClient = httpClient;
+            this.baseUrl = dataApi.Url + "api/transaction";
         }
 
         public async Task<IEnumerable<Transaction>> GetAllAsync()
