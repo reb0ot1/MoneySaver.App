@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MoneySaver.App.Components
+﻿namespace MoneySaver.App.Models
 {
     public class DataItem
     {
@@ -12,5 +7,7 @@ namespace MoneySaver.App.Components
         public double Y { get; set; }
 
         public string DrillDown { get; set; }
+
+        public double Amount { get; set; }
     }
 }
