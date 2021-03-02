@@ -1,17 +1,15 @@
 ﻿(function () {
-    console.log("START");
     window.pieChart = {
-        showChart: function (data) {
-            console.log(data);
-            Highcharts.chart('container', {
+        showChart: function (data, containerName) {
+            Highcharts.chart(containerName, {
                 chart: {
                     type: 'pie'
                 },
                 title: {
-                    text: 'Browser market shares. January, 2018'
+                    text: ''
                 },
                 subtitle: {
-                    text: 'Click the slices to view versions. Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>'
+                    text: ''
                 },
 
                 accessibility: {
@@ -24,22 +22,22 @@
                 },
 
                 plotOptions: {
-                    series: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
                         dataLabels: {
-                            enabled: true,
-                            format: '{point.name}: {point.y:.1f}%'
-                        }
+                            enabled: false
+                        },
+                        showInLegend: true
                     }
                 },
 
                 tooltip: {
-                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+                    pointFormat: 'Spent amount:{point.amount:.1f} <br/><b>{point.percentage:.1f}%</b>'
                 },
 
                 series: [
                     {
-                        name: "Browsers",
                         colorByPoint: true,
                         data: data
                         //data: [

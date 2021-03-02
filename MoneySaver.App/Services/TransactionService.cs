@@ -13,7 +13,7 @@ namespace MoneySaver.App.Services
 {
     public class TransactionService : ITransactionService
     {
-        private string baseUrl = "https://localhost:6001/api/transaction";
+        private string baseUrl;
         //TODO: Change HttpClient with httpClientFactory
         private HttpClient httpClient { get; set; }
 
@@ -26,7 +26,6 @@ namespace MoneySaver.App.Services
         public async Task<IEnumerable<Transaction>> GetAllAsync()
         {
             IEnumerable<Transaction> result = new List<Transaction>();
-            //TODO: Move the url in a centralize place
             result = await httpClient
                 .GetFromJsonAsync<IEnumerable<Transaction>>(baseUrl);
 

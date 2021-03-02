@@ -24,8 +24,8 @@ namespace MoneySaver.App.Pages
             this.Categories = this.PrepareForVisualization(result);
         }
 
-            //EventConsole console;
-            void Log(string eventName, string value)
+        //EventConsole console;
+        void Log(string eventName, string value)
         {
             //console.Log($"{eventName}: {value}");
         }

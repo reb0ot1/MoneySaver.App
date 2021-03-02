@@ -37,6 +37,7 @@ namespace MoneySaver.App
             builder.Services.AddScoped<ITransactionService, TransactionService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IBudgetService, BudgetService>();
+            builder.Services.AddScoped<IReportDataService, ReportsDataService>();
             builder.Services.AddOidcAuthentication(options =>
             {
                 builder.Configuration.Bind("oidc", options.ProviderOptions);

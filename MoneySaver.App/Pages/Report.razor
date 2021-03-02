@@ -3,7 +3,48 @@
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @attribute [Authorize]
 <h3>Report</h3>
-
-<div>
-    <PieChart />
+<EditForm Model="@Filter" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-row">
+        <div class="form-group col-lg-2 col-sm-12">
+            <label for="">From: </label>
+            <InputDate id="transactionDateFrom" class="form-control" @bind-Value="@Filter.From"></InputDate>
+            <ValidationMessage For="@(() => Filter.From)" />
+        </div>
+        <div class="form-group col-lg-2 col-sm-12">
+            <label for="">To: </label>
+            <InputDate id="transactionDateTo" class="form-control" @bind-Value="@Filter.To"></InputDate>
+            <ValidationMessage For="@(() => Filter.To)" />
+        </div>
+        <div class="form-group col-lg-2 col-sm-12">
+            <button type="submit" class="btn btn-primary" style="margin-top:25px">Apply</button>
+        </div>
+    </div>
+</EditForm>
+<div class="row">
+    @if (Data == null)
+    {
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    }
+    else
+    {
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <PieChart @ref="PieChart" Data="@Data" ChartName="Expenses" ChartContainer="expensesChart" />
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <LineChart @ref="LineChart" Data="@Data" ChartName="Line chart" ChartContainer="lineChart" />
+                </div>
+            </div>
+        </div>
+    }
 </div>
+
