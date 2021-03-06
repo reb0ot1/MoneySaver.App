@@ -1,8 +1,6 @@
 ﻿using MoneySaver.App.Models;
 using MoneySaver.App.Models.Configurations;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -55,9 +53,9 @@ namespace MoneySaver.App.Services
             await this.httpClient.PutAsync(baseUrl, transactionJson);
         }
 
-        public async Task DeleteAsync(Transaction transaction)
+        public async Task DeleteAsync(string transactionId)
         {
-            await this.httpClient.DeleteAsync(baseUrl);
+            await this.httpClient.GetAsync($"{baseUrl}/remove/{transactionId}");
         }
     }
 }

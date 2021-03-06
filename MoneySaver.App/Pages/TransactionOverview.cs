@@ -28,13 +28,15 @@ namespace MoneySaver.App.Pages
         {
             var result = await CategoryService.GetAllAsync();
             TransactionCategories = this.PrepareForVisualization(result);
-            //TransactionCategories = await CategoryService.GetAllAsync();
+
             Transactions = (await this.TransactionService.GetAllAsync())
                 .OrderByDescending(t => t.TransactionDate)
                 .ToList();
         }
 
         protected TransactionDialog TransactionDialog { get; set; }
+
+        protected ConfirmationDialog ConfirmationDialog { get; set; }
 
         protected void AddTransaction()
         {
@@ -46,13 +48,27 @@ namespace MoneySaver.App.Pages
             TransactionDialog.Show(this.Transactions.FirstOrDefault(f => f.Id == transactionId));
         }
 
-        public async void AddTransactionDialog_OnDialogClose(bool result)
+        protected async void DeleteOperation(Guid transactionId)
         {
-            this.Transactions = (await this.TransactionService.GetAllAsync()).OrderByDescending(t => t.TransactionDate)
+            this.ConfirmationDialog.Show(transactionId.ToString());
+            //TransactionDialog.Show(this.Transactions.FirstOrDefault(f => f.Id == transactionId));
+            //await this.TransactionService.DeleteAsync(transactionId.ToString());
+        }
+
+        public async void DeleteTransaction(string transactionId)
+        {
+            await this.TransactionService.DeleteAsync(transactionId);
+        }
+
+        public async void OnDialogClose(bool result)
+        {
+            this.Transactions = (await this.TransactionService.GetAllAsync())
+                .OrderByDescending(t => t.TransactionDate)
                 .ToList();
             StateHasChanged();
         }
 
+        //TODO: This logic should be moved to the API ???
         private IEnumerable<TransactionCategory> PrepareForVisualization(IEnumerable<TransactionCategory> categories)
         {
             var result = new List<TransactionCategory>();
