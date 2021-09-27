@@ -59,6 +59,8 @@ namespace MoneySaver.App.Pages
 
         protected CategoryDialog CategoryDialog { get; set; }
 
+        protected ConfirmationDialog ConfirmationDialog { get; set; }
+
         protected void AddItem(TransactionCategory item = null)
         {
             if (item != null)
@@ -81,6 +83,11 @@ namespace MoneySaver.App.Pages
         protected void EditItem(TransactionCategory parrentItem)
         {
             this.CategoryDialog.Show(parrentItem);
+        }
+
+        protected void DeleteOperation(TransactionCategory parrentItem)
+        {
+
         }
 
         protected void DeleteItem(TransactionCategory parrentItem)

@@ -5,6 +5,9 @@
 @inject SignOutSessionStateManager SignOutManager
 
 <AuthorizeView>
+    <Authorizing>
+        <p class="authorizing"></p>
+    </Authorizing>
     <Authorized>
         <a href="authentication/profile">Hello, @context.User.Identity.Name!</a>
         <button class="nav-link btn btn-link" @onclick="BeginSignOut">Log out</button>
