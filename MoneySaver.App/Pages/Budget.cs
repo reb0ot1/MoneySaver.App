@@ -27,20 +27,7 @@ namespace MoneySaver.App.Pages
 
         protected async override Task OnInitializedAsync()
         {
-            var categories = await CategoryService.GetAllAsync();
-            TransactionCategories = this.PrepareForVisualization(categories);
-
-            var budgetItems = await BudgetService.GetBudgetByTimeType(2);
-            foreach (var item in budgetItems.BudgetItems)
-            {
-                if (item != null)
-                {
-                    item.TransactionCategory = this.TransactionCategories
-                        .FirstOrDefault(e => e.TransactionCategoryId == item.TransactionCategoryId);
-                }
-            }
-
-            BudgetModel = budgetItems;
+            await this.UpdateCompoment();
         }
 
         protected BudgetItemDialog BudgetItemDialog { get; set; }
@@ -57,44 +44,32 @@ namespace MoneySaver.App.Pages
 
         public async void AddItem_OnDialogClose()
         {
-            //TODO: Needs refactoring
-            var categories = await CategoryService.GetAllAsync();
-            TransactionCategories = this.PrepareForVisualization(categories);
+            await this.UpdateCompoment();
 
-            var budgetItems = await BudgetService.GetBudgetByTimeType(2);
-            foreach (var item in budgetItems.BudgetItems)
-            {
-                if (item != null)
-                {
-                    item.TransactionCategory = this.TransactionCategories
-                        .FirstOrDefault(e => e.TransactionCategoryId == item.TransactionCategoryId);
-                }
-            }
-
-            BudgetModel = budgetItems;
             StateHasChanged();
         }
 
         public async void RemoveItem(int id)
         {
-            //TODO: Needs refactoring
-            //TODO: Neet to show pop-up to confirm that the user is okay to remove the selected item
             await this.BudgetService.RemoveBudgetItem(id);
-            var categories = await CategoryService.GetAllAsync();
-            TransactionCategories = this.PrepareForVisualization(categories);
+            await this.UpdateCompoment();
+            StateHasChanged();
+        }
 
-            var budgetItems = await BudgetService.GetBudgetByTimeType(2);
-            foreach (var item in budgetItems.BudgetItems)
+        //TODO: This method for customize visualization should be moved somewhere else
+        public static string CheckLevel(int percValue)
+        {
+            if (levelLow < percValue && percValue <= levelMiddle)
             {
-                if (item != null)
-                {
-                    item.TransactionCategory = this.TransactionCategories
-                        .FirstOrDefault(e => e.TransactionCategoryId == item.TransactionCategoryId);
-                }
+                return "bg-warning";
             }
 
-            BudgetModel = budgetItems;
-            StateHasChanged();
+            if (percValue <= levelLow)
+            {
+                return "bg-danger";
+            }
+
+            return "bg-success";
         }
 
         //TODO: The method bellow needs to be declare once, because it`s used by other pages.
@@ -109,6 +84,7 @@ namespace MoneySaver.App.Pages
                 var children = categories
                     .Where(w => w.ParentId == parentCategory.TransactionCategoryId)
                     .ToList();
+
                 if (children.Any())
                 {
                     foreach (var item in children)
@@ -121,21 +97,30 @@ namespace MoneySaver.App.Pages
             }
 
             return categories.OrderBy(e => e.AlternativeName);
+
         }
 
-        public static string CheckLevel(int percValue)
+        private async Task UpdateCompoment()
         {
-            if (levelLow < percValue && percValue <= levelMiddle)
+            var categories = await CategoryService.GetAllAsync();
+            TransactionCategories = this.PrepareForVisualization(categories);
+
+            var budgetItems = await BudgetService.GetBudgetByTimeType(2);
+            foreach (var item in budgetItems.BudgetItems)
             {
-                return "bg-warning";
+                if (item != null)
+                {
+                    item.TransactionCategory = this.TransactionCategories
+                        .FirstOrDefault(e => e.TransactionCategoryId == item.TransactionCategoryId);
+                }
             }
 
-            if (percValue <= levelLow)
-            {
-                return "bg-danger";
-            }
+            budgetItems.BudgetItems = budgetItems
+                                        .BudgetItems
+                                        .OrderBy(o => o.TransactionCategory.AlternativeName)
+                                        .ToArray();
 
-            return "bg-success";
+            BudgetModel = budgetItems;
         }
     }
 }

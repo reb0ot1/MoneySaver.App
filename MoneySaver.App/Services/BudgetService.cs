@@ -1,8 +1,6 @@
 ﻿using MoneySaver.App.Models;
 using MoneySaver.App.Models.Configurations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -15,6 +13,7 @@ namespace MoneySaver.App.Services
     {
         private HttpClient httpClient;
         private Uri uri;
+        private const string BaseApiPath = "api/budget";
         public BudgetService(HttpClient httpClient, DataApi dataApi)
         {
             this.uri = new Uri(dataApi.Url);
@@ -23,7 +22,7 @@ namespace MoneySaver.App.Services
         public async Task<BudgetModel> GetBudgetByTimeType(int intType)
         {
             BudgetModel result = null;
-            var uri = new Uri(this.uri, "api/budget/items");
+            var uri = new Uri(this.uri, $"{BaseApiPath}/items");
             result = await httpClient.GetFromJsonAsync<BudgetModel>(uri);
 
             return result;
@@ -36,7 +35,7 @@ namespace MoneySaver.App.Services
                 Encoding.UTF8, "application/json"
                 );
 
-            var response = await this.httpClient.PostAsync(new Uri(this.uri, "api/budget/additem"), budgetItemJson);
+            var response = await this.httpClient.PostAsync(new Uri(this.uri, $"{BaseApiPath}/additem"), budgetItemJson);
             if (response.IsSuccessStatusCode)
             {
                 await JsonSerializer.DeserializeAsync<BudgetItemModel>(await response.Content.ReadAsStreamAsync());
@@ -50,16 +49,12 @@ namespace MoneySaver.App.Services
                 Encoding.UTF8, "application/json"
                 );
 
-            var response = await this.httpClient.PutAsync(new Uri(this.uri, "api/budget/updateitem"), budgetItemJson);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await JsonSerializer.DeserializeAsync<BudgetItemModel>(await response.Content.ReadAsStreamAsync());
-            }
+            await this.httpClient.PutAsync(new Uri(this.uri, $"{BaseApiPath}/updateitem"), budgetItemJson);
         }
 
         public async Task RemoveBudgetItem(int id)
         {
-            var uri = new Uri(this.uri, $"api/budget/removeitem/{id}");
+            var uri = new Uri(this.uri, $"{BaseApiPath}/removeitem/{id}");
             await this.httpClient.DeleteAsync(uri);
         }
     }

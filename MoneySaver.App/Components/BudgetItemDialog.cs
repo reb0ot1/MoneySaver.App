@@ -40,7 +40,7 @@ namespace MoneySaver.App.Components
 
             ShowDialog = false;
             await CloseEventCallback.InvokeAsync(true);
-            StateHasChanged();
+            //StateHasChanged();
         }
 
         public void Show(BudgetItemModel model = null)

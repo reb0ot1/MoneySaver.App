@@ -23,19 +23,21 @@
             <CategoryDialog @ref="CategoryDialog" CloseEventCallback="@OnDialogClose"></CategoryDialog>
             <div class="col-md-12" style="margin-bottom: 16px">
                 <RadzenTree Expand=@OnExpand Change=@OnChange Data=@Categories Style="width: 100%">
-                    <RadzenTreeLevel TextProperty="Name" ChildrenProperty="Children">
+                    <RadzenTreeLevel TextProperty="Name" ChildrenProperty="Children" HasChildren="@(c => { var ch = c as TransactionCategory; return ch.Children.Count() > 0; })">
                         <Template>
-                            <span>@((context.Value as TransactionCategory).Name)</span>
-                            <div>
-                                <button type="button" class="btn btn-info btn-sm" @onclick="@(() => AddItem((context.Value as TransactionCategory)))">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                                <button type="button" class="btn btn-primary btn-sm" @onclick="@(() => EditItem((context.Value as TransactionCategory)))">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button type="button" class="btn btn-danger btn-sm" @onclick="@(() => DeleteItem((context.Value as TransactionCategory)))">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
+                            <div class="row col-12">
+                               <div class="col-6">@((context.Value as TransactionCategory).Name)</div> 
+                               <div class="col-6">
+                                   <button type="button" class="btn btn-info btn-sm" @onclick="@(() => AddItem((context.Value as TransactionCategory)))">
+                                       <i class="fas fa-plus"></i>
+                                   </button>
+                                   <button type="button" class="btn btn-primary btn-sm" @onclick="@(() => EditItem((context.Value as TransactionCategory)))">
+                                       <i class="fas fa-edit"></i>
+                                   </button>
+                                   <button type="button" class="btn btn-danger btn-sm" @onclick="@(() => DeleteItem((context.Value as TransactionCategory)))">
+                                       <i class="fas fa-trash-alt"></i>
+                                   </button>
+                               </div> 
                             </div>
                             @*<button type="button" class="btn btn-danger btn-sm" @onclick="@(() => AddItem((context.Value as TransactionCategory)))">
                                 <i class="fas fa-trash fa-xs" @onclick="@(() => AddItem((context.Value as TransactionCategory)))"></i>

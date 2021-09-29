@@ -95,6 +95,7 @@ namespace MoneySaver.App.Pages
 
         }
 
+        //Make the structure hierarchy
         private List<TransactionCategory> PrepareForVisualization(IEnumerable<TransactionCategory> categories)
         {
             var parentTransactionCategoryModels = categories

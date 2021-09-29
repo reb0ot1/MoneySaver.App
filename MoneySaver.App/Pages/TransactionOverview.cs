@@ -58,9 +58,10 @@ namespace MoneySaver.App.Pages
         public async void DeleteTransaction(string transactionId)
         {
             await this.TransactionService.DeleteAsync(transactionId);
+            await OnDialogClose(true);
         }
 
-        public async void OnDialogClose(bool result)
+        public async Task OnDialogClose(bool result)
         {
             this.Transactions = (await this.TransactionService.GetAllAsync())
                 .OrderByDescending(t => t.TransactionDate)

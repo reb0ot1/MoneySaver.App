@@ -11,7 +11,7 @@ else
         <button @onclick="AddItem" class="btn btn-info table-btn quick-add-btn"><i class="fas fa-plus" /></button>
         <BudgetItemDialog @ref="BudgetItemDialog" CloseEventCallback="@AddItem_OnDialogClose" ТransactionCategories="@TransactionCategories.ToArray()"></BudgetItemDialog>
 
-        <div class="row col-md-12" style="font:bold">
+        <div class="row col-md-12" style="font:bold; margin-bottom:10px;">
             <div class="col-md-2">
                 Category
             </div>
